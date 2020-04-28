@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const restricted = require("./auth/restricted-middleware")
 
 const userRouter = require("./users/users-router")
 const authRouter = require("./auth/auth-router")
@@ -15,8 +16,8 @@ server.use(express.json());
 server.use(morgan("dev"));
 
 server.use("/auth", authRouter)
-server.use("/users", userRouter)
-server.use("/wordlists", wordlistsRouter)
+server.use("/users", restricted, userRouter)
+server.use("/wordlists", restricted, wordlistsRouter)
 
 server.get("/", (req,res) => {
     res.json({message: "Server is up and running"})

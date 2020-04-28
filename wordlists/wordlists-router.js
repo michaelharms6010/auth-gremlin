@@ -6,7 +6,7 @@ const wordlistValidator = require("./wordlist-validator");
 const admin_ids = [13, 30];
 
 
-router.get("/", restricted, (req, res) => {
+router.get("/", (req, res) => {
   Wordlists.getAllApproved()
     .then(wordlists => {
       res.status(200).json(wordlists);
@@ -16,7 +16,7 @@ router.get("/", restricted, (req, res) => {
     });
 });
 
-router.get("/all", restricted, (req, res) => {
+router.get("/all", (req, res) => {
   Wordlists.getAll()
     .then(wordlists => {
       res.status(200).json(wordlists);
@@ -36,7 +36,7 @@ router.get("/count", (req, res) => {
     });
 });
 
-router.get("/mine", restricted, (req, res) => {
+router.get("/mine", (req, res) => {
   const user_id = req.decodedJwt.id;
     Wordlists.getUserPuzzles(user_id)
       .then(post => {
@@ -62,7 +62,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.post("/", restricted, (req, res) => {
+router.post("/", (req, res) => {
   const body = req.body;
   delete body.approved;
   body.wordlist = wordlistValidator(body.wordlist).split(",").map(item => item.trim()).filter(item => item.length > 0).join(",")
@@ -80,7 +80,7 @@ router.post("/", restricted, (req, res) => {
   }
 });
 
-router.put("/approve/:id", restricted, (req,res) => {
+router.put("/approve/:id", (req,res) => {
   const {id} = req.params;
   if (admin_ids.includes(req.decodedJwt.id)) {
     Wordlists.update(id, {approved: true})
@@ -96,9 +96,9 @@ router.put("/approve/:id", restricted, (req,res) => {
   }
 })
 
-router.put("/:id", restricted, (req, res) => {});
+router.put("/:id", (req, res) => {});
 
-router.delete("/:id", restricted, (req, res) => {
+router.delete("/:id", (req, res) => {
   const user_id = req.decodedJwt.id;
   Wordlists.findById(req.params.id)
   .then(wordlist => {
