@@ -6,7 +6,7 @@ const wordlistValidator = require("./wordlist-validator");
 const admin_ids = [13, 30];
 
 
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   Wordlists.getAllApproved()
     .then(wordlists => {
       res.status(200).json(wordlists);
@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/all", (req, res) => {
+router.get("/all", restricted, (req, res) => {
   Wordlists.getAll()
     .then(wordlists => {
       res.status(200).json(wordlists);
